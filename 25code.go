@@ -36,7 +36,7 @@ func main() {
 			},
 		},
 	}
-	k := 2
+	k := 3
 	node = reverseKGroup(node, k)
 	fmt.Println(node.Val)
 	for node.Next != nil {
@@ -51,6 +51,34 @@ type ListNode struct {
 }
 
 func reverseKGroup(head *ListNode, k int) *ListNode {
+	dummy := &ListNode{Next: head}
+	pre := dummy
+	for head != nil {
+		temp := pre
+		for i := 0; i < k; i++ {
+			temp = temp.Next
+			if temp == nil {
+				return dummy.Next
+			}
+		}
+		nex := temp.Next
+		head, temp = reverse(head, temp)
+		pre.Next = head
+		temp.Next = nex
+		pre = temp
+		head = temp.Next
+	}
+	return dummy.Next
+}
 
-	return head
+func reverse(head, temp *ListNode) (*ListNode, *ListNode) {
+	prev := temp.Next
+	p := head
+	for prev != temp {
+		nex := p.Next
+		p.Next = prev
+		prev = p
+		p = nex
+	}
+	return temp, head
 }
